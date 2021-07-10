@@ -87,25 +87,6 @@ export default {
 
 
 
-    shareScreen() {
-        if ( this.userMediaAvailable() ) {
-            return navigator.mediaDevices.getDisplayMedia( {
-                video: {
-                    cursor: "always"
-                },
-                audio: {
-                    echoCancellation: true,
-                    noiseSuppression: true,
-                    sampleRate: 44100
-                }
-            } );
-        }
-
-        else {
-            throw new Error( 'User media not available' );
-        }
-    },
-
 
     getIceServer() {
         return {
@@ -231,14 +212,6 @@ export default {
         }
     },
 
-
-    saveRecordedStream( stream, user ) {
-        let blob = new Blob( stream, { type: 'video/webm' } );
-
-        let file = new File( [blob], `${ user }-${ moment().unix() }-record.webm` );
-
-        saveAs( file );
-    },
 
 
     toggleModal( id, show ) {
