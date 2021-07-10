@@ -5,7 +5,7 @@
     top: 40.5px;
     z-index: 1000;
     position: fixed;
-    color: #fff;
+    color: #ffffff;
     padding-right: 5px;
     padding-left: 5px;
     padding-bottom: 40px;
@@ -19,6 +19,7 @@
     overflow-x: hidden;
     transition: all 0.3s ease !important;
     -webkit-transition: all 0.3s ease !important;
+    background-color: #f8fafc;
     -moz-transition: all 0.3s ease !important;
 }
 
@@ -27,12 +28,12 @@
     margin-bottom: 20px;
     overflow-x: hidden;
     overflow-y: auto;
-    scrollbar-width: none; /* Firefox */
-    -ms-overflow-style: none;  /* IE 10+ */
+    scrollbar-width: none; 
+    -ms-overflow-style: none; 
 }
 
 #chat-messages::-webkit-scrollbar {
-    width: 0px;  /* remove scrollbar space */
+    width: 0px; 
     background: transparent;
 }
 
@@ -188,6 +189,7 @@
         width: 100vw;
         z-index: 99999;
         transition: 0.3s;
+        background-color: #f1f1f1;
         top: 47px;
     }
   
@@ -202,6 +204,7 @@
     .chat-box{
         bottom: 90px;
         margin-bottom: 0px;
+        background-color: #f1f1f1;
     }
     
     .card-sm{

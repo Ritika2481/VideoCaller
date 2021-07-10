@@ -1,8 +1,9 @@
-
-import h from './helpers.js';
+import sscreen from './sharescreen.js';
+import media from './media.js';
+import chat from './chat.js';
 
 window.addEventListener( 'load', () => {
-    const room = h.getQString( location.href, 'room' );
+    const room = media.getQString( location.href, 'room' );
     const username = sessionStorage.getItem( 'username' );
 
     if ( !room ) {
@@ -65,9 +66,9 @@ window.addEventListener( 'load', () => {
                 if ( data.description.type === 'offer' ) {
                     data.description ? await pc[data.sender].setRemoteDescription( new RTCSessionDescription( data.description ) ) : '';
 
-                    h.getUserFullMedia().then( async ( stream ) => {
+                    media.getUserFullMedia().then( async ( stream ) => {
                         if ( !document.getElementById( 'local' ).srcObject ) {
-                            h.setLocalStream( stream );
+                            media.setLocalStream( stream );
                         }
 
                         //save my stream
@@ -94,17 +95,17 @@ window.addEventListener( 'load', () => {
 
 
             socket.on( 'chat', ( data ) => {
-                h.addChat( data, 'remote' );
+                chat.addChat( data, 'remote' );
             } );
         } );
 
 
         function getAndSetUserStream() {
-            h.getUserFullMedia().then( ( stream ) => {
+            media.getUserFullMedia().then( ( stream ) => {
                 //save my stream
                 myStream = stream;
 
-                h.setLocalStream( stream );
+                media.setLocalStream( stream );
             } ).catch( ( e ) => {
                 console.error( `stream error: ${ e }` );
             } );
@@ -122,13 +123,13 @@ window.addEventListener( 'load', () => {
             socket.emit( 'chat', data );
 
             //add localchat
-            h.addChat( data, 'local' );
+            chat.addChat( data, 'local' );
         }
 
 
 
         function init( createOffer, partnerName ) {
-            pc[partnerName] = new RTCPeerConnection( h.getIceServer() );
+            pc[partnerName] = new RTCPeerConnection( media.getIceServer() );
 
             if ( screen && screen.getTracks().length ) {
                 screen.getTracks().forEach( ( track ) => {
@@ -143,7 +144,7 @@ window.addEventListener( 'load', () => {
             }
 
             else {
-                h.getUserFullMedia().then( ( stream ) => {
+                media.getUserFullMedia().then( ( stream ) => {
                     //save my stream
                     myStream = stream;
 
@@ -151,7 +152,7 @@ window.addEventListener( 'load', () => {
                         pc[partnerName].addTrack( track, stream );//should trigger negotiationneeded event
                     } );
 
-                    h.setLocalStream( stream );
+                    media.setLocalStream( stream );
                 } ).catch( ( e ) => {
                     console.error( `stream error: ${ e }` );
                 } );
@@ -210,7 +211,7 @@ window.addEventListener( 'load', () => {
                     //put div in main-section elem
                     document.getElementById( 'videos' ).appendChild( cardDiv );
 
-                    h.adjustVideoElemSize();
+                    media.adjustVideoElemSize();
                 }
             };
 
@@ -220,11 +221,11 @@ window.addEventListener( 'load', () => {
                 switch ( pc[partnerName].iceConnectionState ) {
                     case 'disconnected':
                     case 'failed':
-                        h.closeVideo( partnerName );
+                        media.closeVideo( partnerName );
                         break;
 
                     case 'closed':
-                        h.closeVideo( partnerName );
+                        media.closeVideo( partnerName );
                         break;
                 }
             };
@@ -235,14 +236,14 @@ window.addEventListener( 'load', () => {
                 switch ( pc[partnerName].signalingState ) {
                     case 'closed':
                         console.log( "Signalling state is 'closed'" );
-                        h.closeVideo( partnerName );
+                        media.closeVideo( partnerName );
                         break;
                 }
             };
         }
         
         function broadcastNewTracks( stream, type, mirrorMode = true ) {
-            h.setLocalStream( stream, mirrorMode );
+            media.setLocalStream( stream, mirrorMode );
 
             let track = type == 'audio' ? stream.getAudioTracks()[0] : stream.getVideoTracks()[0];
 
@@ -250,15 +251,15 @@ window.addEventListener( 'load', () => {
                 let pName = pc[p];
 
                 if ( typeof pc[pName] == 'object' ) {
-                    h.replaceTrack( track, pc[pName] );
+                    sscreen.replaceTrack( track, pc[pName] );
                 }
             }
         }
 
         function shareScreen() {
-            h.shareScreen().then( ( stream ) => {
-                h.toggleShareIcons( true );
-                h.toggleVideoBtnDisabled( true );
+        sscreen.shareScreen().then( ( stream ) => {
+                sscreen.toggleShareIcons( true );
+                media.toggleVideoBtnDisabled( true );
                 screen = stream;
                 //show shared screen to all participants
                 broadcastNewTracks( stream, 'video', false );
@@ -274,14 +275,14 @@ window.addEventListener( 'load', () => {
 
         function stopSharingScreen() {
             //enable video toggle btn
-            h.toggleVideoBtnDisabled( false );
+        media.toggleVideoBtnDisabled( false );
 
             return new Promise( ( res, rej ) => {
                 screen.getTracks().length ? screen.getTracks().forEach( track => track.stop() ) : '';
 
                 res();
             } ).then( () => {
-                h.toggleShareIcons( false );
+            sscreen.toggleShareIcons( false );
                 broadcastNewTracks( myStream, 'video' );
             } ).catch( ( e ) => {
                 console.error( e );

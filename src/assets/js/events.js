@@ -1,5 +1,5 @@
-import helpers from './helpers.js';
-
+import chat from './chat.js';
+import media from './media.js';
 window.addEventListener( 'load', () => {
     //When the chat icon is clicked
     document.querySelector( '#toggle-chat-pane' ).addEventListener( 'click', ( e ) => {
@@ -23,7 +23,7 @@ window.addEventListener( 'load', () => {
         //remove the 'New' badge on chat icon (if any) once chat is opened.
         setTimeout( () => {
             if ( document.querySelector( '#chat-pane' ).classList.contains( 'chat-opened' ) ) {
-                helpers.toggleChatNotificationBadge();
+                chat.toggleChatNotificationBadge();
             }
         }, 300 );
     } );
@@ -64,7 +64,7 @@ window.addEventListener( 'load', () => {
             sessionStorage.setItem( 'username', yourName );
 
             //create room link
-            let roomLink = `${ location.origin }?room=${ roomName.trim().replace( ' ', '_' ) }_${ helpers.generateRandomString() }`;
+            let roomLink = `${ location.origin }?room=${ roomName.trim().replace( ' ', '_' ) }_${ media.generateRandomString() }`;
 
             //show message with link to room
             document.querySelector( '#room-created' ).innerHTML = `Meeting successfully created. Click <a href='${ roomLink }'>here</a> to enter meeting. 
@@ -106,16 +106,16 @@ window.addEventListener( 'load', () => {
 
     document.addEventListener( 'click', ( e ) => {
         if ( e.target && e.target.classList.contains( 'expand-remote-video' ) ) {
-            helpers.maximiseStream( e );
+            media.maximiseStream( e );
         }
 
         else if ( e.target && e.target.classList.contains( 'mute-remote-mic' ) ) {
-            helpers.singleStreamToggleMute( e );
+            media.singleStreamToggleMute( e );
         }
     } );
 
 
     document.getElementById( 'closeModal' ).addEventListener( 'click', () => {
-        helpers.toggleModal( 'recording-options-modal', false );
+        media.toggleModal( 'recording-options-modal', false );
     } );
 } );

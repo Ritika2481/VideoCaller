@@ -1,4 +1,4 @@
-export default {
+export default{
     generateRandomString() {
         const crypto = window.crypto || window.msCrypto;
         let array = new Uint32Array(1);
@@ -85,26 +85,6 @@ export default {
         }
     },
 
-    shareScreen() {
-        if ( this.userMediaAvailable() ) {
-            return navigator.mediaDevices.getDisplayMedia( {
-                video: {
-                    cursor: "always"
-                },
-                audio: {
-                    echoCancellation: true,
-                    noiseSuppression: true,
-                    sampleRate: 44100
-                }
-            } );
-        }
-
-        else {
-            throw new Error( 'User media not available' );
-        }
-    },
-
-
     getIceServer() {
         return {
             iceServers: [
@@ -122,91 +102,9 @@ export default {
             ]
         };
     },
-
-
-    addChat( data, senderType ) {
-        let chatMsgDiv = document.querySelector( '#chat-messages' );
-        let contentAlign = 'justify-content-end';
-        let senderName = 'You';
-        let msgBg = 'bg-white';
-
-        if ( senderType === 'remote' ) {
-            contentAlign = 'justify-content-start';
-            senderName = data.sender;
-            msgBg = '';
-
-            this.toggleChatNotificationBadge();
-        }
-
-        let infoDiv = document.createElement( 'div' );
-        infoDiv.className = 'sender-info';
-        infoDiv.innerHTML = `${ senderName } - ${ moment().format( 'Do MMMM, YYYY h:mm a' ) }`;
-
-        let colDiv = document.createElement( 'div' );
-        colDiv.className = `col-10 card chat-card msg ${ msgBg }`;
-        colDiv.innerHTML = xssFilters.inHTMLData( data.msg ).autoLink( { target: "_blank", rel: "nofollow"});
-
-        let rowDiv = document.createElement( 'div' );
-        rowDiv.className = `row ${ contentAlign } mb-2`;
-
-
-        colDiv.appendChild( infoDiv );
-        rowDiv.appendChild( colDiv );
-
-        chatMsgDiv.appendChild( rowDiv );
-
-        /**
-         * Move focus to the newly added message but only if:
-         * 1. Page has focus
-         * 2. User has not moved scrollbar upward. This is to prevent moving the scroll position if user is reading previous messages.
-         */
-        if ( this.pageHasFocus ) {
-            rowDiv.scrollIntoView();
-        }
-    },
-
-
-    toggleChatNotificationBadge() {
-        if ( document.querySelector( '#chat-pane' ).classList.contains( 'chat-opened' ) ) {
-            document.querySelector( '#new-chat-notification' ).setAttribute( 'hidden', true );
-        }
-
-        else {
-            document.querySelector( '#new-chat-notification' ).removeAttribute( 'hidden' );
-        }
-    },
-
-
-
-    replaceTrack( stream, recipientPeer ) {
-        let sender = recipientPeer.getSenders ? recipientPeer.getSenders().find( s => s.track && s.track.kind === stream.kind ) : false;
-
-        sender ? sender.replaceTrack( stream ) : '';
-    },
-
-
-
-    toggleShareIcons( share ) {
-        let shareIconElem = document.querySelector( '#share-screen' );
-
-        if ( share ) {
-            shareIconElem.setAttribute( 'title', 'Stop sharing screen' );
-            shareIconElem.children[0].classList.add( 'text-primary' );
-            shareIconElem.children[0].classList.remove( 'text-white' );
-        }
-
-        else {
-            shareIconElem.setAttribute( 'title', 'Share screen' );
-            shareIconElem.children[0].classList.add( 'text-white' );
-            shareIconElem.children[0].classList.remove( 'text-primary' );
-        }
-    },
-
-
     toggleVideoBtnDisabled( disabled ) {
         document.getElementById( 'toggle-video' ).disabled = disabled;
     },
-
 
     maximiseStream( e ) {
         let elem = e.target.parentElement.previousElementSibling;

@@ -102,25 +102,26 @@
             <div class="row">
                 <video class="local-video mirror-mode" id='local' volume='0' autoplay muted></video>
             </div>
-            
             <div class="row">
                 <div class="col-md-12 main" id='main-section'>                    
-                    <div class="row mt-2 mb-2" id='videos'></div>
+                <div class="row mt-2 mb-2" id='videos'></div>
+            </div>
+              
+
+            <div class="col-md-3 chat-col d-print-none mb-2 bg-dark" id='chat-pane' hidden>
+                <div class="row">
+                    <div class="col-12 text-center h2 mb-3">CHAT</div>
                 </div>
 
-                <div class="col-md-3 chat-col d-print-none mb-2 bg-dark" id='chat-pane' hidden>
-                    <div class="row">
-                        <div class="col-12 text-center h2 mb-3">CHAT</div>
-                    </div>
+                <div id='chat-messages'></div>
 
-                    <div id='chat-messages'></div>
-
-                    <div class="row">
-                        <textarea id='chat-input' class="form-control rounded-0 chat-box border-dark" rows='3' placeholder="Type here..."></textarea>
-                    </div>
+                <div class="row">
+                    <textarea id='chat-input' class="form-control rounded-0 chat-box border-dark" rows='3' placeholder="Type here..."></textarea>
                 </div>
             </div>
         </div>
-    </body>
-    <script src="./speechRecognition.js"></script>
+    </div>
+        
+</body>
+<script src="./speechRecognition.js"></script>
 </html>
