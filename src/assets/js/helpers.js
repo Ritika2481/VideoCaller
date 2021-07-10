@@ -85,7 +85,24 @@ export default {
         }
     },
 
+    shareScreen() {
+        if ( this.userMediaAvailable() ) {
+            return navigator.mediaDevices.getDisplayMedia( {
+                video: {
+                    cursor: "always"
+                },
+                audio: {
+                    echoCancellation: true,
+                    noiseSuppression: true,
+                    sampleRate: 44100
+                }
+            } );
+        }
 
+        else {
+            throw new Error( 'User media not available' );
+        }
+    },
 
 
     getIceServer() {

@@ -240,12 +240,7 @@ window.addEventListener( 'load', () => {
                 }
             };
         }
-
-
-
         
-
-
         function broadcastNewTracks( stream, type, mirrorMode = true ) {
             h.setLocalStream( stream, mirrorMode );
 
@@ -260,6 +255,38 @@ window.addEventListener( 'load', () => {
             }
         }
 
+        function shareScreen() {
+            h.shareScreen().then( ( stream ) => {
+                h.toggleShareIcons( true );
+                h.toggleVideoBtnDisabled( true );
+                screen = stream;
+                //show shared screen to all participants
+                broadcastNewTracks( stream, 'video', false );
+                screen.getVideoTracks()[0].addEventListener( 'ended', () => {
+                    stopSharingScreen();
+                } );
+            } ).catch( ( e ) => {
+                console.error( e );
+            } );
+        }
+
+
+
+        function stopSharingScreen() {
+            //enable video toggle btn
+            h.toggleVideoBtnDisabled( false );
+
+            return new Promise( ( res, rej ) => {
+                screen.getTracks().length ? screen.getTracks().forEach( track => track.stop() ) : '';
+
+                res();
+            } ).then( () => {
+                h.toggleShareIcons( false );
+                broadcastNewTracks( myStream, 'video' );
+            } ).catch( ( e ) => {
+                console.error( e );
+            } );
+        }
 
         //Chat textarea
         document.getElementById( 'chat-input' ).addEventListener( 'keypress', ( e ) => {
@@ -326,7 +353,18 @@ window.addEventListener( 'load', () => {
             broadcastNewTracks( myStream, 'audio' );
         } );
 
+        //when share screen button will be clicked
+        document.getElementById( 'share-screen' ).addEventListener( 'click', ( e ) => {
+            e.preventDefault();
 
+            if ( screen && screen.getVideoTracks().length && screen.getVideoTracks()[0].readyState != 'ended' ) {
+                stopSharingScreen();
+            }
+
+            else {
+                shareScreen();
+            }
+        } );
         
 
 
