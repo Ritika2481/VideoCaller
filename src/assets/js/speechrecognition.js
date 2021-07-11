@@ -1,3 +1,9 @@
+var connect = require("connect");
+
+var app = connect().use(connect.static(__dirname + '/public'));
+
+app.listen(3000);
+
 if ("webkitSpeechRecognition" in window) {
     // Initialize webkitSpeechRecognition
     let speechRecognition = new webkitSpeechRecognition();

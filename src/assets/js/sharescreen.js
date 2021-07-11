@@ -1,8 +1,5 @@
 export default{
-    
-
-
-
+ 
 toggleShareIcons( share ) {
     let shareIconElem = document.querySelector( '#share-screen' );
 
