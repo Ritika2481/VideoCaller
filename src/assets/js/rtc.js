@@ -347,7 +347,7 @@ window.addEventListener( 'load', () => {
             }
         } );      
           
-        document.getElementById( 'leave-call' ).addEventListener( 'click', ( e ) => {
+        document.getElementById( 'toggle-video' ).addEventListener( 'click', ( e ) => {
             e.preventDefault();
 
 
