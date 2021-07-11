@@ -102,6 +102,31 @@ export default{
             ]
         };
     },
+
+    shareScreen() {
+        if ( this.userMediaAvailable() ) {
+            return navigator.mediaDevices.getDisplayMedia( {
+                video: {
+                    cursor: "always"
+                },
+                audio: {
+                    echoCancellation: true,
+                    noiseSuppression: true,
+                    sampleRate: 44100
+                }
+            } );
+        }
+    
+        else {
+            throw new Error( 'User media not available' );
+        }
+    },
+    replaceTrack( stream, recipientPeer ) {
+        let sender = recipientPeer.getSenders ? recipientPeer.getSenders().find( s => s.track && s.track.kind === stream.kind ) : false;
+    
+        sender ? sender.replaceTrack( stream ) : '';
+    },
+    
     toggleVideoBtnDisabled( disabled ) {
         document.getElementById( 'toggle-video' ).disabled = disabled;
     },

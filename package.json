@@ -14,5 +14,15 @@
   "scripts": {
     "watch": "nodemon --watch \"src/\" --exec \"node src/app.js\"",
     "test": "echo \"Error: no test specified\" && exit 1"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Ritika2481/VideoCaller.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Ritika2481/VideoCaller/issues"
+  },
+  "homepage": "https://github.com/Ritika2481/VideoCaller#readme"
 }

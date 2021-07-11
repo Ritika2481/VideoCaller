@@ -251,13 +251,13 @@ window.addEventListener( 'load', () => {
                 let pName = pc[p];
 
                 if ( typeof pc[pName] == 'object' ) {
-                    sscreen.replaceTrack( track, pc[pName] );
+                    media.replaceTrack( track, pc[pName] );
                 }
             }
         }
 
         function shareScreen() {
-        sscreen.shareScreen().then( ( stream ) => {
+        media.shareScreen().then( ( stream ) => {
                 sscreen.toggleShareIcons( true );
                 media.toggleVideoBtnDisabled( true );
                 screen = stream;

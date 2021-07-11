@@ -1,3 +1,4 @@
+import sscreen from './sharescreen.js';
 import chat from './chat.js';
 import media from './media.js';
 window.addEventListener( 'load', () => {
@@ -67,7 +68,7 @@ window.addEventListener( 'load', () => {
             let roomLink = `${ location.origin }?room=${ roomName.trim().replace( ' ', '_' ) }_${ media.generateRandomString() }`;
 
             //show message with link to room
-            document.querySelector( '#room-created' ).innerHTML = `Meeting successfully created. Click <a href='${ roomLink }'>here</a> to enter meeting. 
+            document.querySelector( '#room-created' ).innerHTML = `Meeting room successfully created. Click <a href='${ roomLink }'>here</a> to enter meeting. 
                 Share the meeting link with participants.`; 
 
             //empty the values
