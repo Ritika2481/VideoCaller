@@ -100,7 +100,6 @@ window.addEventListener( 'load', () => {
 
         function showCommElements() {
             if (usertype === 'chat'){
-
                 showChatCommElements();
             } else {
                 showCallCommElements();
@@ -348,9 +347,11 @@ window.addEventListener( 'load', () => {
             }
         } );      
           
-        document.getElementById( 'toggle-video' ).addEventListener( 'click', ( e ) => {
+        document.getElementById( 'leave-call' ).addEventListener( 'click', ( e ) => {
             e.preventDefault();
 
+
+            sessionStorage.setItem( 'usertype', 'chat' );
             let elem = document.getElementById( 'toggle-video' );
 
             if ( myStream.getVideoTracks()[0].enabled ) {
@@ -372,6 +373,25 @@ window.addEventListener( 'load', () => {
             broadcastNewTracks( myStream, 'video' );
         } );
 
+        document.getElementById( 'leave-call' ).addEventListener( 'click', ( e ) => {
+            e.preventDefault();
+
+            if ( myStream.getVideoTracks() ) {
+                myStream.getVideoTracks()[0].enabled = false;
+                const localStream = document.getElementById("local");
+                localStream.srcObject = null;                
+                broadcastNewTracks( myStream, 'video' );
+                localStream.remove();
+            }
+            for ( let participant in pc ) {
+                const partnerName = pc[participant];
+                const partnerStream = document.getElementById( `${ partnerName }-video` );
+                if (partnerStream) {
+                    partnerStream.srcObject = null;
+                    partnerStream.remove();
+                }
+            }
+        } );
 
         //When the mute icon is clicked
         document.getElementById( 'toggle-mute' ).addEventListener( 'click', ( e ) => {
@@ -410,15 +430,5 @@ window.addEventListener( 'load', () => {
                 shareScreen();
             }
         } );
-
-        document.getElementById( 'leave-meet' ).addEventListener( 'click', ( e ) => {
-            e.preventDefault();
-            sessionStorage.setItem( 'usertype', 'chat' );
-            myStream.getAudioTracks()[0].enabled = false
-            myStream.getVideoTracks()[0].enabled = false;
-            dispatchEvent(new Event('load'));
-        } );
-
-
     }
 } );
