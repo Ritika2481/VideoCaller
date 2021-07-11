@@ -122,7 +122,7 @@ window.addEventListener( 'load', () => {
             const callCommElem = document.getElementsByClassName( 'call-comm' );
             for ( let i = 0; i < callCommElem.length; i++ ) {
                 callCommElem[i].setAttribute( 'hidden', true );
-            }    
+            }   
         }
         function showCallCommElements() {
             const callCommElem = document.getElementsByClassName( 'call-comm' );
@@ -378,10 +378,12 @@ window.addEventListener( 'load', () => {
 
             if ( myStream.getVideoTracks() ) {
                 myStream.getVideoTracks()[0].enabled = false;
-                const localStream = document.getElementById("local");
-                localStream.srcObject = null;                
+                myStream.getVideoTracks()[0].srcObject = null;
                 broadcastNewTracks( myStream, 'video' );
-                localStream.remove();
+                const localStream = document.getElementById("local");
+                if (localStream) {
+                    localStream.srcObject = null;               
+                }
             }
             for ( let participant in pc ) {
                 const partnerName = pc[participant];
@@ -390,6 +392,10 @@ window.addEventListener( 'load', () => {
                     partnerStream.srcObject = null;
                     partnerStream.remove();
                 }
+            }
+            const callCommElem = document.getElementsByClassName( 'call-comm' );
+            for ( let i = 0; i < callCommElem.length; i++ ) {
+                callCommElem[i].setAttribute( 'hidden', true );
             }
         } );
 
