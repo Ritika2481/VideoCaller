@@ -393,7 +393,7 @@ window.addEventListener( 'load', () => {
                     partnerStream.remove();
                 }
             }
-            showCallCommElements();
+            showChatCommElements();
         } );
 
         //When the mute icon is clicked
