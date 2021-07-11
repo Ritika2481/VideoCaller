@@ -393,10 +393,7 @@ window.addEventListener( 'load', () => {
                     partnerStream.remove();
                 }
             }
-            const callCommElem = document.getElementsByClassName( 'call-comm' );
-            for ( let i = 0; i < callCommElem.length; i++ ) {
-                callCommElem[i].setAttribute( 'hidden', true );
-            }
+            showCallCommElements();
         } );
 
         //When the mute icon is clicked
