@@ -18,6 +18,8 @@
         <script src='https://cdn.rawgit.com/yahoo/xss-filters/master/dist/xss-filters.js'></script>
         <script src='assets/js/autolink.js'></script>
         
+        
+        
     </head>
 
     <body>
@@ -25,7 +27,7 @@
         <nav class="navbar fixed-top bg-primary rounded-0 d-print-none">
             <div class="text-white">Teams</div>
 
-            <div class="pull-right room-comm" hidden>
+            <div class="pull-right call-comm" hidden>
                 <button class="btn btn-sm rounded-0 btn-no-effect" id='toggle-video' title="Hide Video">
                     <i class="fa fa-video text-white"></i>
                 </button>
@@ -37,13 +39,26 @@
                 <button class="btn btn-sm rounded-0 btn-no-effect" id='share-screen' title="Share screen">
                     <i class="fa fa-desktop text-white"></i>
                 </button>
-
+                
                 <button class="btn btn-sm text-white pull-right btn-no-effect" id='toggle-chat-pane'>
                     <i class="fa fa-comment"></i> <span class="badge badge-danger very-small font-weight-lighter" id='new-chat-notification' hidden>New</span>
                 </button>
 
                 <button class="btn btn-sm rounded-0 btn-no-effect text-white">
-                    <a href="/" class="text-white text-decoration-none"><i class="fa fa-sign-out-alt text-white" title="Leave"></i></a>
+                    <a href="/speech.html" target="_blank" class="text-white text-decoration-none"><i class="fa fa-edit text-white" title="Transcript"></i></a>
+                </button>
+                <button class="btn btn-sm rounded-0 btn-no-effect" id='leave-meet' title="Join Conversation">
+                    <i class="fa fa-times-circle text-white"></i>
+                </button>
+                
+                <button class="btn btn-sm rounded-0 btn-no-effect text-white">
+                    <a href="/" class="text-white text-decoration-none"><i class="fa fa-sign-out-alt text-white" title="End Meeting"></i></a>
+                </button>
+            </div>
+           
+            <div class="pull-right chat-comm" hidden>
+                <button class="btn btn-sm rounded-0 btn-no-effect" id='enter-call' title="Join Meeting">
+                    <i class="fa fa-camera text-white"></i>
                 </button>
             </div>
         </nav>
@@ -97,10 +112,13 @@
                 <div class="col-12 col-md-4 offset-md-4 mb-3">
                     <button id='enter-room' class="btn btn-block rounded-0 btn-primary">Enter Meeting</button>
                 </div>
+                <div class="col-12 col-md-4 offset-md-4 mb-3">
+                    <button id='enter-chat' class="btn btn-block rounded-0 btn-info">Join Conversation</button>
+                </div>
             </div>
             
         </div>
-
+ 
         <div class="container-fluid room-comm" hidden>
             <div class="row">
                 <video class="local-video mirror-mode" id='local' volume='0' autoplay muted></video>
@@ -109,8 +127,7 @@
                 <div class="col-md-12 main" id='main-section'>                    
                 <div class="row mt-2 mb-2" id='videos'></div>
             </div>
-              
-
+            
             <div class="col-md-3 chat-col d-print-none mb-2 bg-dark" id='chat-pane' hidden>
                 <div class="row">
                     <div class="col-12 text-center h2 mb-3">CHAT</div>
@@ -124,7 +141,7 @@
             </div>
         </div>
     </div>
-        
+    <script src="./assets/js/speechrecognition.js"></script>
+    <script src="./assets/js/language.js"></script>
 </body>
-<script src="./speechRecognition.js"></script>
 </html>

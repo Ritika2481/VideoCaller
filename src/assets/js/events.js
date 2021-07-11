@@ -1,4 +1,3 @@
-import sscreen from './sharescreen.js';
 import chat from './chat.js';
 import media from './media.js';
 window.addEventListener( 'load', () => {
@@ -15,7 +14,8 @@ window.addEventListener( 'load', () => {
         }
 
         else {
-            chatElem.attributes.removeNamedItem( 'hidden' );
+            if (chatElem.attributes.getNamedItem( 'hidden' ))
+                chatElem.attributes.removeNamedItem( 'hidden' );
             mainSecElem.classList.remove( 'col-md-12' );
             mainSecElem.classList.add( 'col-md-9' );
             chatElem.classList.add( 'chat-opened' );
@@ -68,7 +68,7 @@ window.addEventListener( 'load', () => {
             let roomLink = `${ location.origin }?room=${ roomName.trim().replace( ' ', '_' ) }_${ media.generateRandomString() }`;
 
             //show message with link to room
-            document.querySelector( '#room-created' ).innerHTML = `Meeting room successfully created. Click <a href='${ roomLink }'>here</a> to enter meeting. 
+            document.querySelector( '#room-created' ).innerHTML = `Meeting successfully created. Click <a href='${ roomLink }'>here</a> to enter meeting. 
                 Share the meeting link with participants.`; 
 
             //empty the values
@@ -104,7 +104,37 @@ window.addEventListener( 'load', () => {
         }
     } );
 
+    //Start conversation.
+    document.getElementById( 'enter-chat' ).addEventListener( 'click', ( e ) => {
+        e.preventDefault();
 
+        let name = document.querySelector( '#username' ).value;
+
+        if ( name ) {
+            //remove error message, if any
+            document.querySelector( '#err-msg-username' ).innerHTML = "";
+
+            //save the user's name in sessionStorage
+            sessionStorage.setItem( 'username', name );
+            //save the user's name in sessionStorage
+            sessionStorage.setItem( 'usertype', 'chat' );
+            //reload room
+            location.reload();
+        }
+
+        else {
+            document.querySelector( '#err-msg-username' ).innerHTML = "Please input your name";
+        }
+    } );
+
+    //Join meeting from conversation.
+    document.getElementById( 'enter-call' ).addEventListener( 'click', ( e ) => {
+        e.preventDefault();
+        sessionStorage.setItem( 'usertype', 'call' );
+        dispatchEvent(new Event('load'));
+    } );
+
+   
     document.addEventListener( 'click', ( e ) => {
         if ( e.target && e.target.classList.contains( 'expand-remote-video' ) ) {
             media.maximiseStream( e );
@@ -116,7 +146,7 @@ window.addEventListener( 'load', () => {
     } );
 
 
-    document.getElementById( 'closeModal' ).addEventListener( 'click', () => {
+    /*document.getElementById( 'closeModal' ).addEventListener( 'click', () => {
         media.toggleModal( 'recording-options-modal', false );
-    } );
+    } );*/
 } );

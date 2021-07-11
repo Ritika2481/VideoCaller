@@ -5,6 +5,7 @@ import chat from './chat.js';
 window.addEventListener( 'load', () => {
     const room = media.getQString( location.href, 'room' );
     const username = sessionStorage.getItem( 'username' );
+    const usertype = sessionStorage.getItem( 'usertype' );
 
     if ( !room ) {
         document.querySelector( '#room-create' ).attributes.removeNamedItem( 'hidden' );
@@ -14,20 +15,15 @@ window.addEventListener( 'load', () => {
         document.querySelector( '#username-set' ).attributes.removeNamedItem( 'hidden' );
     }
 
-    else {
-        let commElem = document.getElementsByClassName( 'room-comm' );
-
-        for ( let i = 0; i < commElem.length; i++ ) {
-            commElem[i].attributes.removeNamedItem( 'hidden' );
-        }
-
+    else { 
+        showCommElements();
         var pc = [];
 
         let socket = io( '/stream' );
 
         var socketId = '';
-        var myStream = '';
         var screen = '';
+        var myStream = '';
 
         //Get user video by default
         getAndSetUserStream();
@@ -63,6 +59,9 @@ window.addEventListener( 'load', () => {
 
 
             socket.on( 'sdp', async ( data ) => {
+                if (usertype === 'chat') {
+                    return;
+                }    
                 if ( data.description.type === 'offer' ) {
                     data.description ? await pc[data.sender].setRemoteDescription( new RTCSessionDescription( data.description ) ) : '';
 
@@ -99,8 +98,52 @@ window.addEventListener( 'load', () => {
             } );
         } );
 
+        function showCommElements() {
+            if (usertype === 'chat'){
+
+                showChatCommElements();
+            } else {
+                showCallCommElements();
+            }
+            const commElem = document.getElementsByClassName( 'room-comm' ); 
+            for ( let i = 0; i < commElem.length; i++ ) {
+                if (commElem[i].attributes.getNamedItem( 'hidden' ))
+                    commElem[i].attributes.removeNamedItem( 'hidden' );
+            }
+        }
+        function showChatCommElements() {
+            const chatElem = document.querySelector( '#chat-pane' );
+            chatElem.attributes.removeNamedItem( 'hidden' );
+            chatElem.classList.add( 'chat-opened' );
+            const chatCommElem = document.getElementsByClassName( 'chat-comm' );
+            for ( let i = 0; i < chatCommElem.length; i++ ) {
+                if (chatCommElem[i].attributes.getNamedItem( 'hidden' ))
+                    chatCommElem[i].attributes.removeNamedItem( 'hidden' );
+            }        
+            const callCommElem = document.getElementsByClassName( 'call-comm' );
+            for ( let i = 0; i < callCommElem.length; i++ ) {
+                callCommElem[i].setAttribute( 'hidden', true );
+            }    
+        }
+        function showCallCommElements() {
+            const callCommElem = document.getElementsByClassName( 'call-comm' );
+            for ( let i = 0; i < callCommElem.length; i++ ) {
+                if (callCommElem[i].attributes.getNamedItem( 'hidden' ))
+                    callCommElem[i].attributes.removeNamedItem( 'hidden' );
+            }
+            const chatCommElem = document.getElementsByClassName( 'chat-comm' );
+            for ( let i = 0; i < chatCommElem.length; i++ ) {
+                chatCommElem[i].setAttribute( 'hidden', true );
+            }
+            const chatElem = document.querySelector( '#chat-pane' );
+            chatElem.classList.remove( 'chat-opened' );
+        }
+
 
         function getAndSetUserStream() {
+            if (usertype === 'chat') {
+                return;
+            }
             media.getUserFullMedia().then( ( stream ) => {
                 //save my stream
                 myStream = stream;
@@ -144,6 +187,9 @@ window.addEventListener( 'load', () => {
             }
 
             else {
+                if (usertype === 'chat') {
+                    return;
+                }
                 media.getUserFullMedia().then( ( stream ) => {
                     //save my stream
                     myStream = stream;
@@ -300,10 +346,8 @@ window.addEventListener( 'load', () => {
                     e.target.value = '';
                 }, 50 );
             }
-        } );
-
-
-        //When the video icon is clicked
+        } );      
+          
         document.getElementById( 'toggle-video' ).addEventListener( 'click', ( e ) => {
             e.preventDefault();
 
@@ -366,9 +410,15 @@ window.addEventListener( 'load', () => {
                 shareScreen();
             }
         } );
-        
+
+        document.getElementById( 'leave-meet' ).addEventListener( 'click', ( e ) => {
+            e.preventDefault();
+            sessionStorage.setItem( 'usertype', 'chat' );
+            myStream.getAudioTracks()[0].enabled = false
+            myStream.getVideoTracks()[0].enabled = false;
+            dispatchEvent(new Event('load'));
+        } );
 
 
-        
     }
 } );
