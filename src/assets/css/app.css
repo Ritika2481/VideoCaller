@@ -95,7 +95,7 @@
 
 
 .local-video{
-    bottom: 0;
+    bottom: 50px;
     left: 0;
     position: fixed;
     width:15vw;
